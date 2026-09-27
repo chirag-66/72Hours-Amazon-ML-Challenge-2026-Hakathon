@@ -1,0 +1,209 @@
+              TRAIN DATA
+                  │
+        ┌─────────┴─────────┐
+        ↓                   ↓
+       S1                  S2/S3
+        │                   │
+        └─────────┬─────────┘
+                  ↓
+          NORMALIZATION
+                  ↓
+          CANDIDATE GENERATION
+                  ↓
+          ┌───────────────┐
+          │ Candidate     │
+          │ pairs         │
+          └───────┬───────┘
+                  ↓
+         SIMILARITY FEATURES
+                  ↓
+          XGBOOST / MODEL
+                  ↓
+          VALIDATION
+                  ↓
+          F0.5 + THRESHOLD
+                  ↓
+          FINAL PIPELINE
+                  │
+                  ↓
+              TEST DATA
+                  ↓
+          ┌───────┴────────┐
+          ↓                ↓
+matching_results.tsv   candidate_pairs.tsv
+          │                │
+          └───────┬────────┘
+                  ↓
+             VALIDATOR
+                  
+
+                  RAW DATA
+   ↓
+UNDERSTANDING ✅
+   ↓
+GROUND TRUTH ✅
+   ↓
+BLOCKING DESIGN ✅
+   ↓
+S2 → SQLite ✅
+   ↓
+S3 → SQLite 🔄  ← WE ARE HERE
+   ↓
+CANDIDATE GENERATION ⏳
+   ↓
+FEATURE ENGINEERING ⏳
+   ↓
+XGBoost ⏳
+   ↓
+FINAL SUBMISSION ⏳
+
+
+Positive pair
+S1 business ───── S2/S3 business
+       ↓
+      target = 1
+
+
+Negative pair
+S1 business ───── wrong S2/S3 business
+       ↓
+      target = 0
+
+name_similarity
+address_similarity
+country_match
+name_length_difference
+address_length_difference
+address_number_match
+
+                    ┌─ name similarity
+                    ├─ address similarity
+S1 + S2/S3 pair ────┼─ country match
+                    ├─ number match
+                    └─ other features
+                            ↓
+                         XGBoost
+                            ↓
+                     match probability
+
+S1: ABC Medical Pvt Ltd
+S2: ABC Medical Private Limited        → 1
+S3: ABC Dental Clinic                  → 0
+S3: XYZ Medical Store                  → 0
+
+
+| S1   | Candidate | Name similarity | Address similarity | Country match | Target |
+| ---- | --------- | --------------: | -----------------: | ------------: | -----: |
+| S1-A | S2-X      |            0.92 |               0.88 |             1 |  **1** |
+| S1-A | S2-Y      |            0.31 |               0.20 |             1 |  **0** |
+| S1-A | S3-Z      |            0.76 |               0.10 |             1 |  **0** |
+
+
+Current status
+
+Candidate generation: essentially validated
+Pair dataset: ✅ 50,000 pairs created
+Feature dataset: 🔴 next step
+XGBoost: ⏳
+Validation: ⏳
+Test prediction: ⏳
+Submission: ⏳
+
+# Feature_df:
+
+1. Identification
+
+s1_id
+candidate_id
+entity_id
+
+2. Raw + processed text
+
+business_name_s1
+business_name_candidate
+business_address_s1
+business_address_candidate
+country_s1
+country_candidate
+name_s1_norm
+name_candidate_norm
+address_s1_norm
+address_candidate_norm
+first_number_s1
+first_number_candidate
+
+3. ML features + target
+
+name_ratio
+name_token_sort_ratio
+address_ratio
+address_token_sort_ratio
+country_match
+name_exact_match
+address_exact_match
+name_contains
+address_contains
+name_length_diff
+address_length_diff
+first_number_match
+target
+
+
+# Second Submission
+
+Test Source 1
+   │
+   │  reference businesses
+   ▼
+Blocking
+   │
+   ├──────────────┐
+   ▼              ▼
+Test Source 2   Test Source 3
+   │              │
+   └──────┬───────┘
+          ▼
+   Candidate pairs
+          │
+          ▼
+   Feature calculation
+          │
+          ▼
+     XGBoost model
+          │
+          ▼
+   predict_proba()
+          │
+          ▼
+ Probability for each candidate
+          │
+          ▼
+   threshold = 0.50
+          │
+          ▼
+ matching_results.tsv
+
+
+ S1 business                 Candidate S2/S3
+      │                           │
+      └────── comparison ─────────┘
+                    │
+                    ▼
+        name similarity
+        token similarity
+        address similarity
+        country match
+        exact name
+        exact address
+        contains
+        length difference
+        first number match
+                    │
+                    ▼
+              XGBoost
+                    │
+          ┌─────────┴─────────┐
+          ▼                   ▼
+     probability          prediction
+       0.93                    1
+       0.07                    0

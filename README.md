@@ -636,6 +636,7 @@ https://linkedin.com/in/chirag-thakur-6583ab248
 **Raghav Gupta**
 
 LinkedIn:
+https://www.linkedin.com/in/raghav-gupta-a1b732326/
 ---
 
 # 🏆 About the Challenge

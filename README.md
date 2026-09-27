@@ -177,7 +177,7 @@ S1:
 ['entity_id', 'business_name', 'business_address', 'country']
 
 S2:
-['source1_entity_id', 'matched_entity_ids']
+['entity_id', 'business_name', 'business_address', 'country']
 
 S3:
 ['entity_id', 'business_name', 'business_address', 'country']
@@ -533,11 +533,17 @@ Latest recorded evaluation:
 
 | Submission                 | Date        |     Score | Status    |
 | -------------------------- | ----------- | --------: | --------- |
-| Final evaluated submission | 28 Sep 2026 | **0.342** | Evaluated |
+| Final evaluated submission | 28 Sep 2026 | **0.48056** | Evaluated |
 
 The score shown above represents the latest recorded submission at the time this repository was prepared.
 
 ---
+## 📊 Submission & Leaderboard
+
+The solution was evaluated through the Amazon ML Challenge platform during the competition.
+
+### Evaluation Screenshots
+Provided in assets.
 
 # 🧪 Lessons From the Challenge
 
@@ -627,6 +633,9 @@ https://github.com/chirag-66
 LinkedIn:
 https://linkedin.com/in/chirag-thakur-6583ab248
 
+**Raghav Gupta**
+
+LinkedIn:
 ---
 
 # 🏆 About the Challenge
